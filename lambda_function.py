@@ -1,3 +1,4 @@
+import hmac
 import json
 import os
 import time
@@ -32,6 +33,9 @@ Rules:
 def lambda_handler(event, context):
     try:
         body = json.loads(event.get("body") or "{}")
+        expected = os.environ.get("ACCESS_CODE")
+        if expected and not hmac.compare_digest(str(body.get("code", "")), expected):
+            return reply(401, {"error": "Wrong or missing access code."})
         text = (body.get("text") or "").strip()
         image = body.get("image")  # data URL, e.g. data:image/jpeg;base64,...
         if not text and not image:
