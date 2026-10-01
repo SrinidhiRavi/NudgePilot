@@ -32,7 +32,7 @@
     .tab-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
     .tab-btn.active { background-color: #2e7d54; border-color: #2e7d54; }
     
-    .chat-textarea { w-width: 100%; height: 260px; background-color: #0b251a; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; color: #fff; font-size: 14px; line-height: 1.5; resize: none; margin-bottom: 25px; outline: none; }
+    .chat-textarea { width: 100%; height: 520px; background-color: #0b251a; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; color: #fff; font-size: 14px; line-height: 1.5; resize: none; margin-bottom: 25px; outline: none; }
     .chat-textarea::placeholder { color: #4e6e5d; }
     
     .action-row { display: flex; justify-content: space-between; align-items: center; }
@@ -66,7 +66,82 @@
     .secondary-btn { background-color: #fff; border: 1px solid #d1cfc4; color: #333; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; }
     .primary-btn { background-color: #114d30; border: none; color: #fff; padding: 10px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; }
 
-    @media (max-width: 850px) { .dashboard-grid { grid-template-columns: 1fr; } }
+    /* Bottom Info Feature Grid */
+.info-row-grid {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.info-card {
+  background-color: #fff;
+  border: 1px solid #e8e7e0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.info-icon-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.info-card-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+.info-card-sub {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Footer Section */
+.footer-row {
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e8e7e0;
+  padding-top: 24px;
+  margin-top: auto;
+}
+
+.footer-logo {
+  font-size: 14px;
+  font-weight: bold;
+  color: #0f3323;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: #666;
+}
+    
+    /* Responsive drop to single column for small screens */
+@media (max-width: 850px) {
+  .info-row-grid { grid-template-columns: 1fr; }
+}
   </style>
 </head>
 <body>
@@ -166,5 +241,43 @@ Customer: Thanks! The boxes look good. ₹850 each is a little above the budget 
     </div>
   </main>
 
+<!-- Bottom Feature Badges / Disclaimers -->
+  <section class="info-row-grid">
+    
+    <!-- Card 1 -->
+    <div class="info-card">
+      <div class="info-icon-circle" style="background-color: #eaf2ed; color: #2e7d54;">💬</div>
+      <div class="info-card-text">
+        <div class="info-card-title">No WhatsApp access</div>
+        <div class="info-card-sub">Your account and contacts stay private.</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="info-card">
+      <div class="info-icon-circle" style="background-color: #fbfbe6; color: #8a8125;">⚡</div>
+      <div class="info-card-text">
+        <div class="info-card-title">Private AI analysis</div>
+        <div class="info-card-sub">Your OpenAI key stays on AWS, never in this page.</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="info-card">
+      <div class="info-icon-circle" style="background-color: #eaf2ed; color: #2e7d54;">✓</div>
+      <div class="info-card-text">
+        <div class="info-card-title">You stay in control</div>
+        <div class="info-card-sub">Nothing sends without your action.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Global Footer -->
+  <footer class="footer-row">
+    <div class="footer-logo">NudgePilot AI</div>
+    <div class="footer-text">Private, thoughtful customer follow-ups—with you in control.</div>
+  </footer>
+  
 </body>
 </html>
