@@ -25,9 +25,61 @@
 
     /* LEFT PANELS (Dark Green Dashboard) */
     .left-panel { background-color: #0f3323; border-radius: 24px; padding: 30px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
-    .panel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-    .panel-title { font-size: 20px; font-weight: 600; }
-    .panel-title span { display: block; font-size: 12px; color: #a3b899; margin-bottom: 4px; }
+    .panel-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; /* Changed from flex-start to align elements vertically */
+  margin-bottom: 20px; 
+  width: 100%;
+}
+
+.panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.panel-title { 
+  font-size: 20px; 
+  font-weight: 600; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.panel-title span { 
+  font-size: 14px; 
+  color: #a3b899; 
+  opacity: 0.8;
+}
+
+    /* Dropdown styling to match the screenshot */
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sample-label {
+  font-size: 13px;
+  color: #a3b899;
+}
+
+.context-dropdown {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.context-dropdown option {
+  background-color: #0f3323;
+  color: #fff;
+}
+    
     .tab-container { display: flex; gap: 8px; }
     .tab-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
     .tab-btn.active { background-color: #2e7d54; border-color: #2e7d54; }
@@ -146,9 +198,9 @@
 </head>
 <body>
 
-  <!-- App Header -->
+  <!-- App Header with Functional Reset Link -->
   <header class="header">
-    <div class="logo">NudgePilot</div>
+    <a href="index.html" class="logo" style="text-decoration: none; color: #0f3323;">NudgePilot</a>
     <div class="status-badge"><span class="status-dot"></span> Private prototype</div>
   </header>
 
@@ -165,17 +217,40 @@
     <!-- Left Interaction Box -->
     <section class="left-panel">
       <div>
+        <!-- Panel Header containing Title and Context Dropdown Selector -->
         <div class="panel-header">
           <div class="panel-title"><span>01</span> Customer conversation</div>
-          <div class="tab-container">
-            <button class="tab-btn active">Paste text</button>
-            <button class="tab-btn">WhatsApp</button>
+          
+          <div class="dropdown-container">
+            <span class="sample-label">Try a sample</span>
+            <select id="contextSelect" class="context-dropdown">
+              <option value="sales">Sales lead</option>
+              <option value="appointment">Appointment</option>
+              <option value="payment" selected>Payment</option>
+            </select>
           </div>
         </div>
         
-        <textarea id="chatInput" class="chat-textarea" placeholder="Paste the previous business conversation transcript here...">You: Hi Neha, sharing the quotation for the festive gift boxes we discussed. We can customise the sleeve with your logo.
+        <!-- Toggle Menu Pill Bar -->
+        <div style="background-color: #0b251a; padding: 6px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; text-align: center;">
+          <div style="background-color: #e2f9b8; color: #0f3323; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">Aa Paste text</div>
+          <div style="color: #a3b899; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">■ WhatsApp screenshot</div>
+        </div>
 
-Customer: Thanks! The boxes look good. ₹850 each is a little above the budget I had in mind.</textarea>
+        <!-- Inner Text Area Context Labels -->
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px;">
+          <span style="color: #a3b899;">Paste the previous conversation</span>
+          <span style="color: #e2f9b8; cursor: pointer; font-weight: 600;">Paste from clipboard</span>
+        </div>
+        
+        <!-- Textarea Pre-Loaded with Payment Conversation Sample -->
+        <textarea id="chatInput" class="chat-textarea" placeholder="Paste the previous business conversation transcript here...">You: Hi Kavya, hope the website launch went smoothly. Sharing a reminder that invoice #1042 for ₹28,500 was due last Friday.
+
+Customer: Hi, yes—the launch went well. Sorry, this slipped through while our accounts person was away. She is back on Monday.
+
+You: No worries. Please let me know if you need the invoice resent.
+
+Customer: I have it, thanks. I will ask her to process it on Monday.</textarea>
       </div>
       
       <div class="action-row">
@@ -241,7 +316,7 @@ Customer: Thanks! The boxes look good. ₹850 each is a little above the budget 
     </div>
   </main>
 
-<!-- Bottom Feature Badges / Disclaimers -->
+  <!-- Bottom Feature Badges / Disclaimers -->
   <section class="info-row-grid">
     
     <!-- Card 1 -->
