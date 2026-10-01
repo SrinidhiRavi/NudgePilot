@@ -1,415 +1,585 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>NudgePilot - Private Prototype</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f6f5f0; color: #111; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
-    
-    /* Header Styles */
-    .header { width: 100%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .logo { font-size: 20px; font-weight: bold; color: #0f3323; }
-    .status-badge { background-color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #e0dfd5; display: flex; align-items: center; gap: 6px; }
-    .status-dot { width: 6px; height: 6px; background-color: #a3b899; border-radius: 50%; }
+  <head>
+    <meta charset="UTF-8" />
+    <title>NudgePilot - Private Prototype</title>
+    <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+          body { background-color: #f6f5f0; color: #111; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
 
-    /* Headline Section */
-    .headline-container { width: 100%; max-width: 1100px; margin-bottom: 40px; }
-    .sub-tag { font-size: 11px; font-weight: bold; letter-spacing: 1px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
-    .main-title { font-size: 42px; font-weight: 800; color: #0f3323; line-height: 1.1; max-width: 600px; }
-    .main-title span { color: #2e7d54; text-decoration: underline; text-decoration-color: #a3b899; }
-    .description { color: #666; font-size: 15px; margin-top: 15px; max-width: 700px; }
+          /* Header Styles */
+          .header { width: 100%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+          .logo { font-size: 20px; font-weight: bold; color: #0f3323; }
+          .status-badge { background-color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #e0dfd5; display: flex; align-items: center; gap: 6px; }
+          .status-dot { width: 6px; height: 6px; background-color: #a3b899; border-radius: 50%; }
 
-    /* Dashboard Layout Grid */
-    .dashboard-grid { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+          /* Headline Section */
+          .headline-container { width: 100%; max-width: 1100px; margin-bottom: 40px; }
+          .sub-tag { font-size: 11px; font-weight: bold; tracking: 1px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+          .main-title { font-size: 42px; font-weight: 800; color: #0f3323; line-height: 1.1; max-width: 600px; }
+          .main-title span { color: #2e7d54; text-decoration: underline; text-decoration-color: #a3b899; }
+          .description { color: #666; font-size: 15px; margin-top: 15px; max-width: 700px; }
 
-    /* LEFT PANELS (Dark Green Dashboard) */
-    .left-panel { background-color: #0f3323; border-radius: 24px; padding: 30px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; min-height: 620px; }
-    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; }
-    .panel-title { font-size: 20px; font-weight: 600; }
-    .panel-title span { font-size: 14px; color: #a3b899; opacity: 0.8; margin-right: 4px; }
-    
-    .dropdown-container { display: flex; align-items: center; gap: 10px; }
-    .sample-label { font-size: 13px; color: #a3b899; }
-    .context-dropdown { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; padding: 8px 16px; border-radius: 8px; font-size: 14px; outline: none; cursor: pointer; }
-    .context-dropdown option { background-color: #0f3323; color: #fff; }
+          /* Dashboard Layout Grid */
+          .dashboard-grid { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
 
-    /* Toggle pill bar */
-    .toggle-pill-bar { background-color: #0b251a; padding: 6px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; text-align: center; }
-    .pill-btn { padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; }
-    .pill-btn.active { background-color: #e2f9b8; color: #0f3323; }
-    .pill-btn.inactive { background: none; color: #a3b899; }
+          /* LEFT PANELS (Dark Green Dashboard) */
+          .left-panel { background-color: #0f3323; border-radius: 24px; padding: 30px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+          .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Changed from flex-start to align elements vertically */
+        margin-bottom: 20px;
+        width: 100%;
+      }
 
-    /* Text Input Area styling */
-    .chat-textarea { width: 100%; height: 380px; background-color: #0b251a; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; color: #fff; font-size: 14px; line-height: 1.6; resize: none; outline: none; }
-    .chat-textarea::placeholder { color: #4e6e5d; }
+      .panel-title-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
 
-    /* Screenshot Upload Panel view */
-    .screenshot-upload-container { display: none; width: 100%; height: 380px; border: 1px dashed rgba(255,255,255,0.3); border-radius: 16px; background-color: #0b251a; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; position: relative; }
-    .upload-icon { width: 44px; height: 44px; background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: #e2f9b8; font-size: 20px; }
-    .upload-main-text { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px; }
-    .upload-sub-text { font-size: 13px; color: #a3b899; margin-bottom: 20px; }
-    .choose-btn { background-color: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
-    .choose-btn:hover { background-color: rgba(255,255,255,0.15); }
-    
-    .action-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-    .secure-note { font-size: 11px; color: #a3b899; line-height: 1.4; }
-    .submit-btn { background-color: #e2f9b8; color: #0f3323; border: none; padding: 14px 28px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-    .submit-btn:hover { background-color: #d1eca3; }
+      .panel-title {
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .panel-title span {
+        font-size: 14px;
+        color: #a3b899;
+        opacity: 0.8;
+      }
 
-    /* RIGHT PANELS */
-    .right-container { display: flex; flex-direction: column; gap: 24px; }
-    .metric-card { background-color: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e8e7e0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-    .card-num-header { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; color: #999; margin-bottom: 20px; border-bottom: 1px solid #f0efe9; padding-bottom: 10px; }
-    
-    .metrics-summary-row { display: grid; grid-template-columns: 130px 1fr; gap: 20px; margin-bottom: 25px; }
-    .circle-metric { width: 110px; height: 110px; border-radius: 50%; border: 8px solid #f0efe9; border-top-color: #2e7d54; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; }
-    .circle-num { font-size: 24px; font-weight: 800; color: #111; }
-    .circle-label { font-size: 10px; text-transform: uppercase; color: #666; font-weight: bold; margin-top: 2px; }
-    
-    .data-text-block { display: flex; flex-direction: column; gap: 15px; }
-    .data-label { font-size: 11px; text-transform: uppercase; font-weight: bold; color: #999; }
-    .data-value { font-size: 14px; color: #222; font-weight: 500; margin-top: 4px; line-height: 1.4; }
-    
-    .signals-box { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-    .signal-pill { padding: 8px 14px; border-radius: 20px; font-size: 13px; width: fit-content; }
-    .pill-green { background-color: #eaf2ed; border: 1px solid #d3e5db; color: #2e7d54; }
-    .pill-orange { background-color: #fbf9e6; border: 1px solid #f4f0c7; color: #5c5529; }
-    
-    /* Tone filter buttons on right */
-    .tone-bar { display: flex; gap: 4px; background-color: #f0efe9; padding: 3px; border-radius: 8px; }
-    .tone-btn { border: none; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; background: none; color: #666; }
-    .tone-btn.active { background-color: #fff; color: #111; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+          /* Dropdown styling to match the screenshot */
+      .dropdown-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-    .nudge-output-area { width: 100%; background-color: #faf9f5; border: 1px solid #e8e7e0; border-radius: 16px; padding: 20px; min-height: 120px; font-size: 14px; line-height: 1.6; color: #222; margin-bottom: 12px; outline: none; resize: vertical; }
-    
-    .btn-group { display: flex; justify-content: flex-end; gap: 12px; }
-    .secondary-btn { background-color: #fff; border: 1px solid #d1cfc4; color: #333; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; }
-    .primary-btn { background-color: #0f3323; border: none; color: #fff; padding: 10px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; }
+      .sample-label {
+        font-size: 13px;
+        color: #a3b899;
+      }
 
-    /* Bottom Info Feature Grid */
-    .info-row-grid { width: 100%; max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 30px; margin-bottom: 50px; }
-    .info-card { background-color: #fff; border: 1px solid #e8e7e0; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
-    .info-icon-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-    .info-card-text { display: flex; flex-direction: column; }
-    .info-card-title { font-size: 13px; font-weight: 600; color: #111; }
-    .info-card-sub { font-size: 12px; color: #666; margin-top: 2px; }
+      .context-dropdown {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        cursor: pointer;
+      }
 
-    /* Footer Section */
-    .footer-row { width: 100%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e8e7e0; padding-top: 24px; margin-top: auto; }
-    .footer-logo { font-size: 14px; font-weight: bold; color: #0f3323; }
-    .footer-text { font-size: 12px; color: #666; }
+      .context-dropdown option {
+        background-color: #0f3323;
+        color: #fff;
+      }
 
-    @media (max-width: 850px) { .dashboard-grid { grid-template-columns: 1fr; } .info-row-grid { grid-template-columns: 1fr; } }
-  </style>
-</head>
-<body>
+          .tab-container { display: flex; gap: 8px; }
+          .tab-btn { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+          .tab-btn.active { background-color: #2e7d54; border-color: #2e7d54; }
 
-  <!-- App Header -->
-  <header class="header">
-    <a href="index.html" class="logo" style="text-decoration: none; color: #0f3323;">NudgePilot</a>
-    <div class="status-badge"><span class="status-dot"></span> Private prototype</div>
-  </header>
+          .chat-textarea { width: 100%; height: 520px; background-color: #0b251a; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; color: #fff; font-size: 14px; line-height: 1.5; resize: none; margin-bottom: 25px; outline: none; }
+          .chat-textarea::placeholder { color: #4e6e5d; }
 
-  <!-- Product Title Callouts -->
-  <section class="headline-container">
-    <div class="sub-tag">Follow up without sounding pushy</div>
-    <h1 class="main-title">Turn any customer conversation into the <span>right next message.</span></h1>
-    <p class="description">Paste a chat. Get a clear read on intent, confidence, and timing—then shape a nudge that still sounds like you.</p>
-  </section>
+          .action-row { display: flex; justify-content: space-between; align-items: center; }
+          .secure-note { font-size: 11px; color: #a3b899; line-height: 1.4; }
+          .submit-btn { background-color: #fff; color: #0f3323; border: none; padding: 14px 28px; border-radius: 30px; font-weight: bold; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+          .submit-btn:hover { background-color: #e6e5df; }
 
-  <!-- Core Interactive Grid Area -->
-  <main class="dashboard-grid">
-    
-    <!-- Left Interaction Box -->
-    <section class="left-panel">
-      <div>
-        <div class="panel-header">
-          <div class="panel-title"><span>01</span> Customer conversation</div>
-          
-          <div class="dropdown-container">
-            <span class="sample-label">Try a sample</span>
-            <select id="contextSelect" class="context-dropdown">
-              <option value="sales" selected>Sales lead</option>
-              <option value="appointment">Appointment</option>
-              <option value="payment">Payment</option>
-            </select>
+          /* RIGHT PANELS (White Metric Output Blocks) */
+          .right-container { display: flex; flex-direction: column; gap: 24px; }
+          .metric-card { background-color: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e8e7e0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+          .card-num-header { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; color: #999; margin-bottom: 20px; border-bottom: 1px solid #f0efe9; padding-bottom: 10px; }
+
+          /* Customer Read Flex Row */
+          .metrics-summary-row { display: grid; grid-template-columns: 130px 1fr; gap: 20px; margin-bottom: 25px; }
+          .circle-metric { width: 110px; height: 110px; border-radius: 50%; border: 8px solid #f0efe9; border-top-color: #2e7d54; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+          .circle-num { font-size: 24px; font-weight: 800; color: #111; }
+          .circle-label { font-size: 10px; text-transform: uppercase; color: #666; font-weight: bold; margin-top: 2px; }
+
+          .data-text-block { display: flex; flex-direction: column; gap: 15px; }
+          .data-label { font-size: 11px; text-transform: uppercase; font-weight: bold; color: #999; }
+          .data-value { font-size: 14px; color: #222; font-weight: 500; margin-top: 4px; line-height: 1.4; }
+
+          /* Highlighted Snippet Elements */
+          .signals-box { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+          .signal-pill { background-color: #fbf9e6; border: 1px solid #f4f0c7; padding: 8px 14px; border-radius: 20px; font-size: 13px; color: #5c5529; width: fit-content; }
+
+          /* Generated Response Output Box */
+          .nudge-output-area { background-color: #faf9f5; border: 1px dashed #d1cfc4; border-radius: 16px; padding: 20px; min-h-[120px] font-size: 14px; line-height: 1.6; color: #444; position: relative; margin-bottom: 20px; }
+
+          .btn-group { display: flex; justify-content: flex-end; gap: 12px; }
+          .secondary-btn { background-color: #fff; border: 1px solid #d1cfc4; color: #333; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; }
+          .primary-btn { background-color: #114d30; border: none; color: #fff; padding: 10px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+          /* Bottom Info Feature Grid */
+      .info-row-grid {
+        width: 100%;
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        margin-top: 30px;
+        margin-bottom: 50px;
+      }
+
+      .info-card {
+        background-color: #fff;
+        border: 1px solid #e8e7e0;
+        border-radius: 16px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .info-icon-circle {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+      }
+
+      .info-card-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .info-card-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #111;
+      }
+
+      .info-card-sub {
+        font-size: 12px;
+        color: #666;
+        margin-top: 2px;
+      }
+
+      /* Footer Section */
+      .footer-row {
+        width: 100%;
+        max-width: 1100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #e8e7e0;
+        padding-top: 24px;
+        margin-top: auto;
+      }
+
+      .footer-logo {
+        font-size: 14px;
+        font-weight: bold;
+        color: #0f3323;
+      }
+
+      .footer-text {
+        font-size: 12px;
+        color: #666;
+      }
+
+          /* Responsive drop to single column for small screens */
+      @media (max-width: 850px) {
+        .info-row-grid { grid-template-columns: 1fr; }
+      }
+
+      .seg{color:#a3b899;padding:10px;border-radius:8px;font-size:13px;cursor:pointer}
+      .seg.on{background:#e2f9b8;color:#0f3323;font-weight:bold}
+      #dropZone{display:none;height:520px;margin-bottom:25px;border:1px dashed rgba(255,255,255,.3);border-radius:16px;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0b251a;text-align:center;padding:20px}
+      .tone{display:flex;gap:4px;background:#f0efe9;padding:3px;border-radius:10px}
+      .tone button{border:0;background:none;padding:5px 12px;border-radius:8px;font-size:12px;cursor:pointer;color:#666}
+      .tone button.on{background:#fff;color:#0f3323;font-weight:600}
+      .signals-box{flex-direction:row;flex-wrap:wrap}
+      .signal-pill.positive{background:#eef9dc;border-color:#d9efb5;color:#3d5a1f}
+      .signal-pill.concern{background:#fdeee3;border-color:#f6d5bd;color:#8a4a1f}
+      #nudge{width:100%;min-height:120px;resize:vertical;display:block}
+    </style>
+  </head>
+  <body>
+    <!-- App Header with Functional Reset Link -->
+    <header class="header">
+      <a href="index.html" class="logo" style="text-decoration: none; color: #0f3323">NudgePilot</a>
+      <div class="status-badge"><span class="status-dot"></span> Private prototype</div>
+    </header>
+
+    <!-- Product Title Callouts -->
+    <section class="headline-container">
+      <div class="sub-tag">Follow up without sounding pushy</div>
+      <h1 class="main-title">Turn any customer conversation into the <span>right next message.</span></h1>
+      <p class="description">
+        Paste a chat. Get a clear read on intent, confidence, and timing—then shape a nudge that still sounds like you.
+      </p>
+    </section>
+
+    <!-- Core Interactive Grid Area -->
+    <main class="dashboard-grid">
+      <!-- Left Interaction Box -->
+      <section class="left-panel">
+        <div>
+          <!-- Panel Header containing Title and Context Dropdown Selector -->
+          <div class="panel-header">
+            <div class="panel-title"><span>01</span> Customer conversation</div>
+
+            <div class="dropdown-container">
+              <span class="sample-label">Try a sample</span>
+              <select id="contextSelect" class="context-dropdown">
+                <option value="sales">Sales lead</option>
+                <option value="appointment">Appointment</option>
+                <option value="payment" selected>Payment</option>
+              </select>
+            </div>
           </div>
-        </div>
-        
-        <div class="toggle-pill-bar">
-          <button id="pillTextBtn" class="pill-btn active">Aa Paste text</button>
-          <button id="pillScreenshotBtn" class="pill-btn inactive">■ WhatsApp screenshot</button>
-        </div>
 
-        <div id="textAreaView">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px;">
-            <span style="color: #a3b899;">Paste the previous conversation</span>
-            <span id="clipboardBtn" style="color: #e2f9b8; cursor: pointer; font-weight: 600;">Paste from clipboard</span>
+          <!-- Toggle Menu Pill Bar -->
+          <div
+            style="
+              background-color: #0b251a;
+              padding: 6px;
+              border-radius: 12px;
+              margin-bottom: 20px;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 4px;
+              text-align: center;
+            "
+          >
+            <div id="tabText" class="seg on">Aa Paste text</div>
+            <div id="tabShot" class="seg">&#9635; WhatsApp screenshot</div>
           </div>
-          <textarea id="chatInput" class="chat-textarea" placeholder="Paste the previous business conversation transcript here..."></textarea>
+          <div
+            id="textLabels"
+            style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px"
+          >
+            <span style="color: #a3b899">Paste the previous conversation</span>
+            <span id="pasteBtn" style="color: #e2f9b8; cursor: pointer; font-weight: 600">Paste from clipboard</span>
+          </div>
+          <div id="dropZone">
+            <div id="dropMsg" style="font-weight: bold; font-size: 16px">Drop or paste a WhatsApp screenshot</div>
+            <div style="font-size: 12px; color: #a3b899">PNG, JPG or WebP, up to 12 MB</div>
+            <button class="tab-btn" id="chooseBtn">Choose screenshot</button>
+            <input type="file" id="fileInput" accept="image/*" hidden />
+          </div>
+          <!-- Textarea Pre-Loaded with Payment Conversation Sample -->
+          <textarea
+            id="chatInput"
+            class="chat-textarea"
+            placeholder="Paste the previous business conversation transcript here..."
+          >
+You: Hi Kavya, hope the website launch went smoothly. Sharing a reminder that invoice #1042 for ₹28,500 was due last Friday.
+
+Customer: Hi, yes—the launch went well. Sorry, this slipped through while our accounts person was away. She is back on Monday.
+
+You: No worries. Please let me know if you need the invoice resent.
+
+Customer: I have it, thanks. I will ask her to process it on Monday.</textarea
+          >
         </div>
 
-        <div id="screenshotView" class="screenshot-upload-container">
-          <div class="upload-icon">▧</div>
-          <div class="upload-main-text">Drop or paste a WhatsApp screenshot</div>
-          <div class="upload-sub-text">PNG, JPG or WebP · up to 12 MB</div>
-          <button class="choose-btn">Choose screenshot</button>
-          <input type="file" id="hiddenFileInput" style="display:none;" accept="image/*">
+        <div class="action-row">
+          <div class="secure-note">Sent securely to your private AI service.<br />NudgePilot does not store it.</div>
+          <button id="analyzeBtn" class="submit-btn">Analyze & draft nudge</button>
+        </div>
+      </section>
+
+      <!-- Right Dynamic Analytics Results Display -->
+      <div class="right-container">
+        <section class="metric-card">
+          <div class="card-num-header">
+            <div>02 Customer read</div>
+            <div id="startOver" style="cursor: pointer; font-size: 12px">Start over</div>
+          </div>
+          <div class="metrics-summary-row">
+            <div class="circle-metric">
+              <div class="circle-num" id="score">--</div>
+              <div class="circle-label" id="engLabel">Engagement</div>
+            </div>
+            <div class="data-text-block">
+              <div>
+                <div class="data-label">Detected need</div>
+                <div class="data-value" id="need">Run an analysis to see the read.</div>
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              border-top: 1px solid #f0efe9;
+              padding-top: 15px;
+            "
+          >
+            <div>
+              <div class="data-label">Confidence</div>
+              <div class="data-value" id="conf" style="font-weight: bold">--</div>
+            </div>
+            <div>
+              <div class="data-label">Best move</div>
+              <div class="data-value" id="move" style="color: #1f5738; font-weight: bold">--</div>
+            </div>
+          </div>
+          <div style="margin-top: 25px; border-top: 1px solid #f0efe9; padding-top: 15px">
+            <div class="data-label">Signals behind the read</div>
+            <div class="signals-box" id="signals"></div>
+          </div>
+        </section>
+        <section class="metric-card">
+          <div class="card-num-header">
+            <div>03 Your nudge</div>
+            <div class="tone" id="tone">
+              <button data-t="warm" class="on">Warm</button><button data-t="direct">Direct</button
+              ><button data-t="gentle">Gentle</button>
+            </div>
+          </div>
+          <textarea
+            id="nudge"
+            class="nudge-output-area"
+            placeholder="Your drafted message appears here. Edit it freely."
+          ></textarea>
+          <div style="font-size: 12px; color: #999; text-align: right; margin: -8px 0 14px">
+            <span id="count">0</span> characters
+          </div>
+          <div class="btn-group">
+            <button class="secondary-btn" id="copyBtn">Copy message</button>
+            <button class="primary-btn" id="waBtn">Open WhatsApp &#8599;</button>
+          </div>
+          <div style="font-size: 11px; color: #999; text-align: center; margin-top: 12px">
+            WhatsApp opens with the text prefilled. You choose the contact and tap Send.
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Bottom Feature Badges / Disclaimers -->
+    <section class="info-row-grid">
+      <!-- Card 1 -->
+      <div class="info-card">
+        <div class="info-icon-circle" style="background-color: #eaf2ed; color: #2e7d54">💬</div>
+        <div class="info-card-text">
+          <div class="info-card-title">No WhatsApp access</div>
+          <div class="info-card-sub">Your account and contacts stay private.</div>
         </div>
       </div>
-      
-      <div class="action-row">
-        <div id="tipLabel" class="secure-note">- Sent securely to your private AI service. NudgePilot does not store it.</div>
-        <button id="analyzeBtn" class="submit-btn">Analyze & draft nudge &rarr;</button>
+
+      <!-- Card 2 -->
+      <div class="info-card">
+        <div class="info-icon-circle" style="background-color: #fbfbe6; color: #8a8125">⚡</div>
+        <div class="info-card-text">
+          <div class="info-card-title">Private AI analysis</div>
+          <div class="info-card-sub">Your OpenAI key stays on AWS, never in this page.</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="info-card">
+        <div class="info-icon-circle" style="background-color: #eaf2ed; color: #2e7d54">✓</div>
+        <div class="info-card-text">
+          <div class="info-card-title">You stay in control</div>
+          <div class="info-card-sub">Nothing sends without your action.</div>
+        </div>
       </div>
     </section>
 
-    <!-- Right Dynamic Analytics Results Display -->
-    <div class="right-container">
-      <section class="metric-card">
-        <div class="card-num-header"><div>02 Customer read</div><div id="resetStateBtn" style="cursor:pointer; font-size:12px;">Start over</div></div>
-        
-        <div class="metrics-summary-row">
-          <div class="circle-metric">
-            <div id="metricScore" class="circle-num">--</div>
-            <div id="metricLabel" class="circle-label">--</div>
-          </div>
-          <div class="data-text-block">
-            <div>
-              <div class="data-label">Detected Need</div>
-              <div id="detectedNeed" class="data-value">--</div>
-            </div>
-          </div>
-        </div>
+    <!-- Global Footer -->
+    <footer class="footer-row">
+      <div class="footer-logo">NudgePilot AI</div>
+      <div class="footer-text">Private, thoughtful customer follow-ups—with you in control.</div>
+    </footer>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid #f0efe9; padding-top: 15px;">
-          <div>
-            <div class="data-label">Confidence</div>
-            <div id="confidenceVal" class="data-value" style="font-weight: bold; color: #111;">--</div>
-          </div>
-          <div>
-            <div class="data-label">Best Move</div>
-            <div id="bestMoveVal" class="data-value" style="color: #1f5738; font-weight: bold;">--</div>
-          </div>
-        </div>
+    <script>
+      // 1) After you create your Lambda Function URL (see setup steps), paste it here:
+      const API_URL = "https://xodyv32jdmzmr3h7pwcneiwn4a0exvar.lambda-url.ap-southeast-2.on.aws/";
 
-        <div style="margin-top: 25px; border-top: 1px solid #f0efe9; padding-top: 15px;">
-          <div class="data-label" id="signalsCountLabel">Signals behind the read</div>
-          <div id="signalsBox" class="signals-box"></div>
-        </div>
-      </section>
-      
-      <section class="metric-card">
-        <div class="card-num-header">
-          <div>03 Your nudge</div>
-          <div class="tone-bar">
-            <button class="tone-btn active">Warm</button>
-            <button class="tone-btn">Direct</button>
-            <button class="tone-btn">Gentle</button>
-          </div>
-        </div>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; font-size:11px; color:#999;">
-          <div>• Editable—make it yours</div>
-          <div id="charCountLabel">0 characters</div>
-        </div>
-        
-        <textarea id="nudgeOutput" class="nudge-output-area"></textarea>
-        
-        <div class="btn-group">
-          <button id="copyMsgBtn" class="secondary-btn">⎘ Copy message</button>
-          <button class="primary-btn">✆ Open WhatsApp ↗</button>
-        </div>
-        <div style="text-align:center; font-size:11px; color:#999; margin-top:10px;">
-          WhatsApp opens with the text prefilled. You choose the contact and tap Send.
-        </div>
-      </section>
+      const SAMPLES = {
+        sales: [
+          "You: Hi Neha, sharing the quotation for the festive gift boxes we discussed. We can customise the sleeve with your logo.",
+          "Customer: Thanks! The boxes look good. \u20B9850 each is a little above the budget I had in mind.",
+          "You: Understood. If the quantity is 50+, I can bring it to \u20B9790 and include delivery in Bangalore.",
+          "Customer: That sounds more workable. Let me check with my partner and get back to you tomorrow.",
+        ].join("\n\n"),
+        appointment: [
+          "You: Hi Arjun, would you like me to reserve Saturday's 11:30 AM consultation slot for you?",
+          "Customer: Saturday should work. I just need to check if I can move another appointment.",
+          "You: Of course. I can hold it until this evening.",
+          "Customer: Perfect, thank you. I'll confirm soon.",
+        ].join("\n\n"),
+        payment: [
+          "You: Hi Kavya, hope the website launch went smoothly. Sharing a reminder that invoice #1042 for \u20B928,500 was due last Friday.",
+          "Customer: Hi, yes\u2014the launch went well. Sorry, this slipped through while our accounts person was away. She is back on Monday.",
+          "You: No worries. Please let me know if you need the invoice resent.",
+          "Customer: I have it, thanks. I will ask her to process it on Monday.",
+        ].join("\n\n"),
+      };
 
-    </div>
-  </main>
+      const $ = (id) => document.getElementById(id);
+      let mode = "text",
+        imageData = null,
+        tone = "warm",
+        nudges = {};
 
-  <section class="info-row-grid">
-    <div class="info-card">
-      <div class="info-icon-circle" style="background-color: #eaf2ed; color: #2e7d54;">💬</div>
-      <div class="info-card-text">
-        <div class="info-card-title">No WhatsApp access</div>
-        <div class="info-card-sub">Your account and contacts stay private.</div>
-      </div>
-    </div>
-    <div class="info-card">
-      <div class="info-icon-circle" style="background-color: #fbfbe6; color: #8a8125;">⚡</div>
-      <div class="info-card-text">
-        <div class="info-card-title">Private AI analysis</div>
-        <div class="info-card-sub">Your OpenAI key stays on AWS, never in this page.</div>
-      </div>
-    </div>
-    <div class="info-card">
-      <div class="info-icon-circle" style="background-color: #eaf2ed; color: #2e7d54;">✓</div>
-      <div class="info-card-text">
-        <div class="info-card-title">You stay in control</div>
-        <div class="info-card-sub">Nothing sends without your action.</div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer-row">
-    <div class="footer-logo">NudgePilot AI</div>
-    <div class="footer-text">Private, thoughtful customer follow-ups—with you in control.</div>
-  </footer>
-
-  <script>
-    const sampleData = {
-      sales: {
-        inputText: `You: Hi Neha, sharing the quotation for the festive gift boxes we discussed. We can customise the sleeve with your logo.\n\nCustomer: Thanks! The boxes look good. ₹850 each is a little above the budget I had in mind.\n\nYou: Understood. If the quantity is 50+, I can bring it to ₹790 and include delivery in Bangalore.\n\nCustomer: That sounds more workable. Let me check with my partner and get back to you tomorrow.`,
-        score: "78",
-        label: "Warm",
-        need: "Festive gift boxes with a logo-customised sleeve, at a price that fits the buyer",
-        confidence: "High • 94%",
-        bestMove: "Give Neha the time she asked for to check with her partner. If she hasn't replied by tomorrow, send-",
-        signals: [
-          { text: '"The boxes look good."', type: "green" },
-          { text: '"₹850 each is a little above the budget I had in mind."', type: "orange" },
-          { text: '"That sounds more workable."', type: "green" },
-          { text: '"Let me check with my partner and get back to you tomorrow."', type: "green" }
-        ],
-        nudge: "Hi Neha, hope you and your partner had a chance to discuss the gift boxes. Let me know what you think of the ₹790 option for 50+ boxes, including delivery in Bangalore."
-      },
-      appointment: {
-        inputText: `You: Hi Arjun, would you like me to reserve Saturday's 11:30 AM consultation slot for you?\n\nCustomer: Saturday should work. I just need to check if I can move another appointment.\n\nYou: Of course. I can hold it until this evening.\n\nCustomer: Perfect, thank you. I'll confirm soon.`,
-        score: "78",
-        label: "Warm",
-        need: "A Saturday 11:30 AM consultation slot, pending confirmation that they can move a",
-        confidence: "High • 94%",
-        bestMove: "Follow up this evening, as offered, and ask whether they'd like to confirm the slot or need more day",
-        signals: [
-          { text: '"Saturday should work."', type: "green" },
-          { text: '"They need to check whether they can move another appointment."', type: "orange" },
-          { text: '"Perfect, thank you. I'll confirm soon."', type: "green" }
-        ],
-        nudge: "Hi Arjun, checking in about the Saturday 11:30 AM consultation slot. Were you able to move your other appointment?"
-      },
-      payment: {
-        inputText: `You: Hi Kavya, hope the website launch went smoothly. Sharing a reminder that invoice #1042 for ₹28,500 was due last Friday.\n\nCustomer: Hi, yes—the launch went well. Sorry, this slipped through while our accounts person was away. She is back on Monday.\n\nYou: No worries. Please let me know if you need the invoice resent.\n\nCustomer: I have it, thanks. I will ask her to process it on Monday.`,
-        score: "82",
-        label: "Ready",
-        need: "The customer has the invoice and plans to ask their accounts person to process;",
-        confidence: "High • 96%",
-        bestMove: "Acknowledge their update and give them until Monday to process it. If payment has not come in,",
-        signals: [
-          { text: '"Sorry, this slipped through while our accounts person was away."', type: "orange" },
-          { text: '"She is back on Monday."', type: "orange" },
-          { text: '"I have it, thanks. I will ask her to process it on Monday."', type: "green" }
-        ],
-        nudge: "Thanks for the update, Kavya. Glad the launch went well! Please let me know if your accounts team needs anything from me."
+      function loadSample() {
+        $("chatInput").value = SAMPLES[$("contextSelect").value];
       }
-    };
 
-    const contextSelect = document.getElementById('contextSelect');
-    const chatInput = document.getElementById('chatInput');
-    const pillTextBtn = document.getElementById('pillTextBtn');
-    const pillScreenshotBtn = document.getElementById('pillScreenshotBtn');
-    const textAreaView = document.getElementById('textAreaView');
-    const screenshotView = document.getElementById('screenshotView');
-    const tipLabel = document.getElementById('tipLabel');
-    const clipboardBtn = document.getElementById('clipboardBtn');
-    
-    const metricScore = document.getElementById('metricScore');
-    const metricLabel = document.getElementById('metricLabel');
-    const detectedNeed = document.getElementById('detectedNeed');
-    const confidenceVal = document.getElementById('confidenceVal');
-    const bestMoveVal = document.getElementById('bestMoveVal');
-    const signalsBox = document.getElementById('signalsBox');
-    const signalsCountLabel = document.getElementById('signalsCountLabel');
-    const nudgeOutput = document.getElementById('nudgeOutput');
-    const charCountLabel = document.getElementById('charCountLabel');
-    const resetStateBtn = document.getElementById('resetStateBtn');
-    const copyMsgBtn = document.getElementById('copyMsgBtn');
+      function setMode(m) {
+        mode = m;
+        $("tabText").classList.toggle("on", m === "text");
+        $("tabShot").classList.toggle("on", m === "shot");
+        $("textLabels").style.display = m === "text" ? "flex" : "none";
+        $("chatInput").style.display = m === "text" ? "" : "none";
+        $("dropZone").style.display = m === "shot" ? "flex" : "none";
+      }
 
-    function renderDashboard(key) {
-      const data = sampleData[key];
-      if (!data) return;
-
-      chatInput.value = data.inputText;
-      metricScore.innerText = data.score + "/100";
-      metricLabel.innerText = data.label;
-      detectedNeed.innerText = data.need;
-      confidenceVal.innerText = data.confidence;
-      bestMoveVal.innerText = data.bestMove;
-      nudgeOutput.value = data.nudge;
-      
-      charCountLabel.innerText = `${data.nudge.length} characters`;
-
-      signalsBox.innerHTML = '';
-      signalsCountLabel.innerText = `${data.signals.length} found`;
-      data.signals.forEach(sig => {
-        const pill = document.createElement('div');
-        pill.className = `signal-pill ${sig.type === 'green' ? 'pill-green' : 'pill-orange'}`;
-        pill.innerText = sig.text;
-        signalsBox.appendChild(pill);
-      });
-    }
-
-    renderDashboard('sales');
-
-    contextSelect.addEventListener('change', (e) => {
-      renderDashboard(e.target.value);
-    });
-
-    nudgeOutput.addEventListener('input', (e) => {
-      charCountLabel.innerText = `${e.target.value.length} characters`;
-    });
-
-    pillTextBtn.addEventListener('click', () => {
-      pillTextBtn.className = 'pill-btn active';
-      pillScreenshotBtn.className = 'pill-btn inactive';
-      textAreaView.style.display = 'block';
-      screenshotView.style.display = 'none';
-      tipLabel.innerText = '- Sent securely to your private AI service. NudgePilot does not store it.';
-    });
-
-    pillScreenshotBtn.addEventListener('click', () => {
-      pillScreenshotBtn.className = 'pill-btn active';
-      pillTextBtn.className = 'pill-btn inactive';
-      textAreaView.style.display = 'none';
-      screenshotView.style.display = 'flex';
-      tipLabel.innerText = 'Tip: copy a screenshot, then press ⌘V or Ctrl+V here. You can review the extracted text before analysis.';
-    });
-
-    clipboardBtn.addEventListener('click', async () => {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          chatInput.value = text;
-        } else {
-          alert('Clipboard is empty or does not contain text.');
+      // Shrinks the screenshot so it stays under Lambda's 6 MB request limit
+      function readFile(f) {
+        if (!f || !f.type.startsWith("image/")) return;
+        if (f.size > 12 * 1024 * 1024) {
+          alert("Please use an image under 12 MB.");
+          return;
         }
-      } catch (err) {
-        alert('Could not read from clipboard. Please allow browser clipboard permission.');
+        const r = new FileReader();
+        r.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const s = Math.min(1, 1600 / Math.max(img.width, img.height));
+            const c = document.createElement("canvas");
+            c.width = img.width * s;
+            c.height = img.height * s;
+            c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+            imageData = c.toDataURL("image/jpeg", 0.85);
+            $("dropMsg").textContent = "Screenshot ready: " + (f.name || "pasted image");
+          };
+          img.src = r.result;
+        };
+        r.readAsDataURL(f);
       }
-    });
 
-    resetStateBtn.addEventListener('click', () => {
-      chatInput.value = '';
-      metricScore.innerText = '--';
-      metricLabel.innerText = '--';
-      detectedNeed.innerText = '--';
-      confidenceVal.innerText = '--';
-      bestMoveVal.innerText = '--';
-      signalsBox.innerHTML = '';
-      signalsCountLabel.innerText = 'Signals behind the read';
-      nudgeOutput.value = '';
-      charCountLabel.innerText = '0 characters';
-    });
-
-    copyMsgBtn.addEventListener('click', () => {
-      if (nudgeOutput.value) {
-        navigator.clipboard.writeText(nudgeOutput.value);
-        const originalText = copyMsgBtn.innerText;
-        copyMsgBtn.innerText = '✓ Copied!';
-        setTimeout(() => copyMsgBtn.innerText = originalText, 2000);
+      function setTone(t) {
+        tone = t;
+        document.querySelectorAll("#tone button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
+        $("nudge").value = nudges[t] || "";
+        updateCount();
       }
-    });
-  </script>
-</body>
+      function updateCount() {
+        $("count").textContent = $("nudge").value.length;
+      }
+
+      function render(d) {
+        $("score").textContent = d.engagement_score;
+        $("engLabel").textContent = d.engagement_label;
+        $("need").textContent = d.detected_need;
+        $("conf").textContent = d.confidence_label + " \u2022 " + d.confidence + "%";
+        $("move").textContent = d.best_move;
+        $("signals").innerHTML = "";
+        (d.signals || []).forEach((s) => {
+          const el = document.createElement("div");
+          el.className = "signal-pill " + (s.type || "neutral");
+          el.textContent = s.text;
+          $("signals").appendChild(el);
+        });
+        nudges = d.nudges || {};
+        setTone("warm");
+      }
+
+      async function analyze() {
+        if (API_URL.startsWith("PASTE")) {
+          alert("Paste your Lambda Function URL into API_URL in index.html first.");
+          return;
+        }
+        const body = mode === "text" ? { text: $("chatInput").value.trim() } : { image: imageData };
+        if (!body.text && !body.image) {
+          alert("Add a conversation or screenshot first.");
+          return;
+        }
+        const btn = $("analyzeBtn");
+        btn.disabled = true;
+        btn.textContent = "Analyzing...";
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || res.statusText);
+          render(data);
+        } catch (e) {
+          alert("Something went wrong: " + e.message);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Analyze & draft nudge";
+        }
+      }
+
+      $("contextSelect").addEventListener("change", () => {
+        setMode("text");
+        loadSample();
+      });
+      $("tabText").addEventListener("click", () => setMode("text"));
+      $("tabShot").addEventListener("click", () => setMode("shot"));
+      $("chooseBtn").addEventListener("click", () => $("fileInput").click());
+      $("fileInput").addEventListener("change", (e) => readFile(e.target.files[0]));
+      $("dropZone").addEventListener("dragover", (e) => e.preventDefault());
+      $("dropZone").addEventListener("drop", (e) => {
+        e.preventDefault();
+        readFile(e.dataTransfer.files[0]);
+      });
+      document.addEventListener("paste", (e) => {
+        const f = e.clipboardData && e.clipboardData.files[0];
+        if (f && f.type.startsWith("image/")) {
+          setMode("shot");
+          readFile(f);
+        }
+      });
+      $("pasteBtn").addEventListener("click", async () => {
+        try {
+          $("chatInput").value = await navigator.clipboard.readText();
+        } catch (e) {
+          alert("Allow clipboard access, or paste with Ctrl+V.");
+        }
+      });
+      $("analyzeBtn").addEventListener("click", analyze);
+      document.querySelectorAll("#tone button").forEach((b) => b.addEventListener("click", () => setTone(b.dataset.t)));
+      $("nudge").addEventListener("input", () => {
+        nudges[tone] = $("nudge").value;
+        updateCount();
+      });
+      $("copyBtn").addEventListener("click", async () => {
+        await navigator.clipboard.writeText($("nudge").value);
+        $("copyBtn").textContent = "Copied";
+        setTimeout(() => ($("copyBtn").textContent = "Copy message"), 1500);
+      });
+      $("waBtn").addEventListener("click", () =>
+        window.open("https://wa.me/?text=" + encodeURIComponent($("nudge").value), "_blank")
+      );
+      $("startOver").addEventListener("click", () => {
+        $("chatInput").value = "";
+        imageData = null;
+        nudges = {};
+        $("dropMsg").textContent = "Drop or paste a WhatsApp screenshot";
+        $("score").textContent = "--";
+        $("engLabel").textContent = "Engagement";
+        $("need").textContent = "Run an analysis to see the read.";
+        $("conf").textContent = "--";
+        $("move").textContent = "--";
+        $("signals").innerHTML = "";
+        $("nudge").value = "";
+        updateCount();
+      });
+
+      loadSample();
+    </script>
+  </body>
 </html>
