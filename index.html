@@ -503,6 +503,9 @@ Customer: I have it, thanks. I will ask her to process it on Monday.</textarea
           alert("Add a conversation or screenshot first.");
           return;
         }
+        const code = sessionStorage.getItem("code") || prompt("Enter the access code:");
+        if (!code) return;
+        body.code = code;
         const btn = $("analyzeBtn");
         btn.disabled = true;
         btn.textContent = "Analyzing...";
@@ -513,6 +516,8 @@ Customer: I have it, thanks. I will ask her to process it on Monday.</textarea
             body: JSON.stringify(body),
           });
           const data = await res.json();
+          if (res.status === 401) sessionStorage.removeItem("code");
+          else sessionStorage.setItem("code", code);
           if (!res.ok) throw new Error(data.error || res.statusText);
           render(data);
         } catch (e) {
