@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NudgePilot Replica</title>
+  <!-- This script lets you use modern styling instantly -->
+  <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans p-8">
+
+  <!-- Main Container split into two columns -->
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+    
+    <!-- LEFT COLUMN: Dark Green Input Area -->
+    <div class="bg-[#0b3c26] text-white p-6 rounded-2xl">
+      <h1 class="text-2xl font-bold mb-2">Customer conversation</h1>
+      <textarea id="chatInput" class="w-full h-64 p-4 text-black rounded-lg" placeholder="Paste the previous conversation here..."></textarea>
+      <button id="analyzeBtn" class="mt-4 bg-white text-emerald-900 px-6 py-3 rounded-full font-bold">
+        Analyze & draft nudge
+      </button>
+    </div>
+
+    <!-- RIGHT COLUMN: White Results Area -->
+    <div class="space-y-6">
+      <!-- Customer Read Card -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-xl font-semibold mb-4">Customer read</h2>
+        <div class="text-gray-700">Engagement: <span id="engagement" class="font-bold">--</span></div>
+        <div class="text-gray-700">Detected Need: <span id="need">--</span></div>
+      </div>
+      
+      <!-- Generated Nudge Card -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-xl font-semibold mb-2">Your nudge</h2>
+        <div id="nudgeOutput" class="bg-gray-50 p-4 rounded-xl border border-dashed border-gray-300 min-h-[100px] text-gray-500">
+          Your AI response will appear here...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
